@@ -1,0 +1,37 @@
+--Config { 
+--    font =	"xft:Monospace:size=12:antialias=true" 
+--  , commands = [ 
+--      Run StdinReader -- text coming from xmonad
+--      --, Run DynNetwork [] 10 -- network traffic
+--    , Run Wireless "wlp7s0" ["-t", "Wifi: [<qualitybar>] <essid>"] 10
+--    , Run Memory ["-t" ,"RAM: %"] 10 -- RAM usage
+--    , Run Battery [] 10 -- battery time
+--    , Run Volume "default" "Master" [] 10
+--    , Run Date "%d %b %T" "mydate" 10
+--  ]
+--  -- where to show command information
+--  , template = "%StdinReader% }{ %memory% | %default:Master% | --%wlp7s0% | %battery% | %mydate% |"
+-- }
+
+Config { font = "xft:Droid Sans Mono:size=12:antialias=true"
+        , borderColor = "#282A36"
+        , border = TopB
+        , bgColor = "#282A36"
+        , fgColor = "#BBBBFF"
+        , position = TopW L 100
+        , commands = [ 
+            Run StdinReader
+          -- , Run DynNetwork ["-t","<rx>KB:<tx>KB","-L","0","-H","32","--normal","green","--high","red"] 10
+          -- , Run Wireless "" ["-t","<ssid>"] 10
+          -- , Run Volume "default" "Master" ["-t","vol:<volume>%"] 10
+          -- , Run Network "eth1" ["-L","0","-H","32","--normal","green","--high","red"] 10
+          , Run Cpu ["-t","cpu:<total>%","-L","3","-H","50","--normal","green","--high","red"] 10
+          , Run Memory ["-t","mem:<usedratio>%"] 10
+          -- , Run Swap [] 10
+          -- , Run Com "uname" ["-s","-r"] "" 36000
+          , Run Date "%a %_d %b %Y %H:%M" "date" 100
+          ]
+        , sepChar = "%"
+        , alignSep = "}{"
+        , template = "%StdinReader% }{ %cpu% %memory% | <fc=#ee9a00>%date%</fc>"
+        }

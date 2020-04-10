@@ -1,0 +1,16 @@
+#!/bin/bash
+
+pidof dunst && killall dunst
+dunst -conf $HOME/.xmonad/dunstrc &
+
+notify-send -a "Mysterious app" "Message one"
+notify-send "Message" "is the <i>Two</i>"
+sleep 1
+notify-send -u low "A big one" "Message Three is a really long message to test another cool things"
+notify-send -u critical "Message Four
+is multiline"
+notify-send "Message Five"
+notify-send "Message Five"
+notify-send "Message Five"
+notify-send "Message Five"
+notify-send "Message Six"
