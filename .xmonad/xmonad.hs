@@ -15,7 +15,7 @@ import XMonad.Hooks.DynamicLog (dynamicLogWithPP, xmobarPP,
 import XMonad.Hooks.ManageDocks (avoidStruts, manageDocks, docks)
 import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
 import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat, composeOne, (-?>))
-import XMonad.Hooks.FadeInactive (fadeInactiveLogHook)
+import XMonad.Hooks.FadeInactive (fadeInactiveCurrentWSLogHook)
 
 -- Actions
 import XMonad.Actions.CycleWS 
@@ -39,16 +39,16 @@ import Control.Monad (when)
 mySystemFolder = "/run/media/rodrigo/storage/sistema"
 
 myModMask = mod4Mask        -- Mod key es super/meta/win key
-myTerminal = "konsole"      -- Terminal por defecto
+myTerminal = "alacritty"      -- Terminal por defecto
 myDefaultEditor = "code"    -- Default text editor
 
 myBorderWidth = 0       -- Ancho del borde de las ventanas
 mySpacing = 5           -- Espacio entre ventanas. Es margen para cada una así que en efecto es el doble
-myInactiveFade = 0.6   -- Cantidad opacidad de ventanas inactivas
+myInactiveFade = 0.7   -- Cantidad opacidad de ventanas inactivas
 myFont = "Droid Sans Mono"
 
 -- Estos comandos son ejecutados al inicio o con refreshes
-myComposer = "killall -w compton; compton --backend glx --blur-method kawase  --blur-background --blur-strength 20" -- Se encarga de todos los efectos especiales
+myComposer = "killall -w compton; compton --backend glx --blur-method kawase  --blur-background --blur-strength 10" -- Se encarga de todos los efectos especiales
 myTray = "killall -w stalonetray; stalonetray -c $HOME/.xmonad/stalonetrayrc"
 myWallpaperMgr = "feh --randomize --bg-fill " ++ mySystemFolder ++ "/wallpapers/*"
 
@@ -76,7 +76,7 @@ myKeys = [
     , ((myModMask,                  xK_p),      myAppLauncher)
     -- Cosas de XMonad cuando se rompe
     , ((myModMask,                  xK_q),      spawn recompileXmonad)
-    , ((myModMask .|. shiftMask,    xK_q),      promptExit)
+    -- , ((myModMask .|. shiftMask,    xK_q),      promptExit)
     -- Pruebas que no funcionan :(
     , ((myModMask .|. shiftMask,    xK_r),      renameWorkspace def)
     ] ++
@@ -84,6 +84,7 @@ myKeys = [
 
 -- Todos los programas para desplegar al inicio
 myStartupHook = do
+    spawnOnce "/usr/lib/pam_kwallet_init"
     spawnOnce "dunst -conf $HOME/.xmonad/dunstrc"
     spawn myComposer
     spawn myTray
@@ -111,9 +112,9 @@ myManageHook = composeOne [
 myAppLauncher = spawn $ "j4-dmenu-desktop --dmenu=\"dmenu -i -fn '" ++ myFont ++ "-12' -l 10\""
 
 -- Pregunta antes de salir
-promptExit = do
-    response <- runProcessWithInput "dmenu" ["-i","-fn","'"++myFont++"'","-p", "Salir?"] "No\nSi\n"
-    when (response == "Si") (io (exitWith ExitSuccess))
+-- promptExit = do
+--    response <- runProcessWithInput "dmenu" ["-i","-fn","'"++myFont++"'","-p", "Salir?"] "no\nsi\n"
+--    when (response == "si") (io (exitWith ExitSuccess))
 
 main = do
     
@@ -177,7 +178,7 @@ myLogHook bars = do
           { ppOutput = hPutStrLn handler
           , ppTitle = xmobarColor "#C080C0" "" . shorten 50
           }) bars
-    fadeInactiveLogHook myInactiveFade
+    fadeInactiveCurrentWSLogHook myInactiveFade
 
 -- Crea una barra (xmobar) para cada pantalla, todas con la misma configuración
 startBars numberOfScreens = 

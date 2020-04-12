@@ -63,3 +63,5 @@ fi
 # Dotfiles config
 alias config='/usr/bin/git --git-dir=/home/rodrigo/.dotfiles/ --work-tree=/home/rodrigo'
 
+alias tree='tree -C'
+
